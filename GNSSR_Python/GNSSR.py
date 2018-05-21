@@ -46,14 +46,15 @@ def MatlabToPythonDateNum(matlab_datenum):
     dayfrac = datetime.timedelta(days=matlab_datenum%1) - datetime.timedelta(days = 366)
     return day + dayfrac
 
-def DownloadData(startTime, endTime, destination, ftpServer, userName, passWord, dataLevels):
+def DownloadData(startTime, endTime, destination, ftpServer, userName, passWord, dataLevels, ftpDataFolder):
     '''Download data from MERRByS server over the time-range
     Provided the following parameters:
         startTime, endTime: The time range to download
         destination:        The folder where the data should be stored
         ftpServer:          The string: 'ftp.merrbys.co.uk'
         userName, passWord: The credentials given to you on registration
-        dataLevels:         The data levels to download {'L1B': True, 'L2_FDI': True}
+        dataLevels:         The data levels to download {'L1B': True, 'L2_FDI': True, 'L2_CBRE_v0_5': True}
+        ftpDataFolder:      The FTP data access folder 'Data' for regular users or 'DataFast' for low latency access for approved users
         '''
     
     from ftplib import FTP, error_perm
@@ -76,6 +77,8 @@ def DownloadData(startTime, endTime, destination, ftpServer, userName, passWord,
         fileList.append('blackbodyZenith.nc')
     if dataLevels['L2_FDI'] == True:
         fileList.append('L2_FDI.nc')
+    if dataLevels['L2_CBRE_v0_5'] == True:
+        fileList.append('L2_CBRE_v0_5.nc')
 
     ftp = FTP(ftpServer)
     ftp.login(user=userName, passwd = passWord) 
